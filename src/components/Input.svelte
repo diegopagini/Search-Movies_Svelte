@@ -1,5 +1,7 @@
 <!-- scripts -->
 <script>
+  import Movie from './Movie.svelte';
+
   let value = ''
   let response = []; 
   let loading = false;
@@ -30,14 +32,12 @@
   {#if loading}
     <em>loading...</em>
   {:else}
-    {#if response.length > 0}
-      <p>Tenemos <strong>{response.length}</strong> películas.</p>
-    {:else} 
-      <p>No tenemos películas.</p>
-    {/if}  
+    {#each response as movie, index}
+      <Movie index={index} movie={movie} />
+    {:else} <!-- else of each (wow!) -->
+      <p>No tenemos películas.</p>    
+    {/each}  
   {/if}
-
-  
 
 </div>
 <!--end of html -->
@@ -51,5 +51,6 @@
     justify-content: center;
     width: 100%;
   }
+
 </style>
 <!-- end of styles -->
