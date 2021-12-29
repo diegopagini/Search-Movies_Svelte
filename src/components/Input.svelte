@@ -4,20 +4,14 @@
 
   let value = ''
   let response = []; 
-  let loading = false;
 
   const handleInput = (event) => value = event.target.value;
 
   $: if(value.length > 2) {
-    loading = true;
-    fetch(`https://www.omdbapi.com/?s=${value}&apikey=3ea235a0`)
+    response = fetch(`https://www.omdbapi.com/?s=${value}&apikey=3ea235a0`)
     .then(res => res.json())
-    .then(apiResponse => {
-      response = apiResponse.Search || [];
-      loading = false;
-    });
+    .then(apiResponse => apiResponse.Search || []);
   }
-
 </script>
 <!-- end of scripts -->
 
@@ -26,18 +20,18 @@
   <input 
     type="text" 
     on:input={handleInput}
-    placeholder="Search movies" 
+    placeholder="Search yout movies..." 
   />
 
-  {#if loading}
+  {#await response}
     <em>loading...</em>
-  {:else}
-    {#each response as movie, index}
+  {:then movies}
+    {#each movies as movie, index}
       <Movie index={index} movie={movie} />
     {:else} <!-- else of each (wow!) -->
       <p>No tenemos películas.</p>    
     {/each}  
-  {/if}
+  {/await}
 
 </div>
 <!--end of html -->
